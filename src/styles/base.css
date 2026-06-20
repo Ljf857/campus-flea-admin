@@ -1,0 +1,185 @@
+/* ==========================================================================
+   基础层
+   --------------------------------------------------------------------------
+   分两段，边界很重要：
+
+   【@layer base 内】reset 与元素级默认样式。
+     必须待在层里，否则无层级规则会压垮 Tailwind 的 padding/margin/字号工具类
+     （* { margin:0; padding:0 } 是无层级的，而 .p-4 在 utilities 层，
+       无层级恒胜 —— 结果是全站 padding 归零、页面却没有报错，极难发现）。
+     放在 base 层后：UI 工具类能覆盖它，Element Plus 的无层级样式也能覆盖它，
+     三方各就各位。
+
+   【无层级】焦点环、滚动条、动效、工具类。
+     焦点环必须压过 Element Plus 的 outline 重置，否则键盘焦点会消失。
+   ========================================================================== */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html,
+  body,
+  #app {
+    height: 100%;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text-body);
+    background-color: var(--bg-page);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-size: inherit; /* 字号交给 text-* 工具类决定 */
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  /* 未引入 Tailwind preflight，按钮的浏览器默认底色/边框要自己清掉，
+     否则任何 <button> 都会自带一个灰方块和 inset 边框 */
+  button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    text-align: inherit;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+  }
+}
+
+/* ---------- 键盘焦点：只在键盘导航时出现，鼠标点击不显示 ---------- */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* 深色底（侧栏）上的焦点环换成浅色，否则蓝压蓝看不见 */
+.on-dark :focus-visible {
+  outline-color: #93c5fd;
+}
+
+::selection {
+  background-color: var(--color-brand-ring);
+  color: var(--text-primary);
+}
+
+/* ---------- 滚动条：克制、低对比 ---------- */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border-strong);
+  border: 2px solid transparent;
+  background-clip: content-box;
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-subtle);
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ---------- 页面进入：200ms ease-out ---------- */
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.page-enter {
+  animation: page-enter 200ms var(--ease-out-quart) both;
+}
+
+/* 尊重「减少动态效果」系统偏好 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- 屏幕阅读器专用 ---------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- 数字等宽：表格里的金额/数量对齐不跳动 ---------- */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,105 @@
+/* ==========================================================================
+   全局响应式
+   --------------------------------------------------------------------------
+   断点：640 / 768 / 1024 / 1280。
+   移动端判定边界与 stores/app.ts 的 MOBILE_BREAKPOINT(768) 严格保持一致，
+   否则会出现「JS 认为是桌面、CSS 认为是移动」的错位。
+   本文件无层级，以便压过 Element Plus 的默认样式。
+   ========================================================================== */
+
+/* 浮层永远不超出视口 */
+.el-dialog,
+.el-message-box {
+  max-width: calc(100vw - 32px);
+}
+
+/* --------------------------------------------------------------------------
+   < 1024px：主内容左右留白收窄，筛选表单开始换行
+   -------------------------------------------------------------------------- */
+@media (max-width: 1023px) {
+  .el-form--inline .el-form-item {
+    margin-bottom: 12px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   < 768px：移动端
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  .el-dialog {
+    --el-dialog-margin-top: 4vh;
+    margin-bottom: 4vh;
+  }
+
+  .el-dialog__body {
+    padding: 8px 16px 16px;
+  }
+
+  /* 分页：换行居中，隐藏次要信息，压缩按钮 */
+  .el-pagination {
+    flex-wrap: wrap;
+    justify-content: center !important; /* 压过模板里的内联 justify-content:flex-end */
+    row-gap: 6px;
+  }
+
+  .el-pagination .el-pagination__sizes,
+  .el-pagination .el-pagination__total,
+  .el-pagination .el-pagination__jump {
+    display: none;
+  }
+
+  .el-pagination button,
+  .el-pagination .el-pager li {
+    min-width: 28px;
+    height: 28px;
+    line-height: 28px;
+    font-size: 12px;
+  }
+
+  /* 筛选表单：纵向堆叠，控件占满整行 */
+  .el-form--inline .el-form-item {
+    display: flex;
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 12px;
+  }
+
+  .el-form--inline .el-form-item__label {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .el-form--inline .el-form-item__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .el-form--inline .el-form-item__content > .el-input,
+  .el-form--inline .el-form-item__content > .el-select,
+  .el-form--inline .el-form-item__content > .el-date-editor {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* 长选项下拉面板不超出视口 */
+  .el-select-dropdown {
+    max-width: calc(100vw - 24px);
+  }
+
+  /* 表格在移动端本就被卡片列表替代，这里兜底隐藏横向滚动条留白 */
+  .el-table {
+    font-size: 13px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   移动端侧栏抽屉（teleport 到 body，必须写全局样式；scoped 不生效）
+   -------------------------------------------------------------------------- */
+.layout-mobile-drawer .el-drawer__body {
+  padding: 0;
+  overflow: hidden;
+}
+
+.layout-mobile-drawer .el-drawer__header {
+  display: none;
+}

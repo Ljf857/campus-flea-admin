@@ -1,0 +1,10 @@
+/* 全局样式入口。加载顺序即层叠优先级（后者胜）：
+   1. tokens   —— 设计变量 + Tailwind 主题（含 @layer 顺序声明）
+   2. base     —— reset、排版、焦点、动效
+   3. element  —— Element Plus 变量覆盖（必须晚于 element-plus/dist/index.css）
+   4. responsive —— 断点与移动端兜底（必须最后，才能压过前两者）
+   对应 main.ts 中的 import 顺序，勿调整。 */
+@import './tokens.css';
+@import './base.css';
+@import './element.css';
+@import './responsive.css';

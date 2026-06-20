@@ -1,0 +1,60 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+.DS_Store
+dist
+dist-ssr
+coverage
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+*.tsbuildinfo
+
+.eslintcache
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# Vitest
+__screenshots__/
+
+# Vite
+*.timestamp-*-*.mjs
+
+# 本地环境变量覆盖（保留 .env / .env.production 作为默认配置）
+.env.local
+.env.*.local
+*.local
+
+# AI / 编辑器本地配置
+.claude/
+.idea/
+*.swp
+
+# 代码检查缓存
+.oxlintcache
+
+# 构建分析报告
+stats.html
+*-report.html
+
+# 系统文件
+Thumbs.db
+Desktop.ini
